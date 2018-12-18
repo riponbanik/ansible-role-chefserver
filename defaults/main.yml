@@ -1,0 +1,9 @@
+---
+# General config.
+chefserver_version: 12.18.14
+chefadmin_name: chefadmin
+chefadmin_email: admin@4thcoffee.com
+chefadmin_password: password
+chef_organization: 4thcoffee
+chef_organization_full_name: "Fourth Coffee, Inc."
+

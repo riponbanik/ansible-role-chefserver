@@ -1,0 +1,5 @@
+---
+- hosts: all
+  roles:
+    - role: riponbanik.chefserver
+      chefserver_version: 12.18.14

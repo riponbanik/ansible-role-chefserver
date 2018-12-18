@@ -1,0 +1,8 @@
+---
+- hosts: all
+  roles:
+    - role: kitchen_test_role
+      chefserver_version: 12.18.14
+
+      
+      

@@ -1,0 +1,21 @@
+dependencies: []
+galaxy_info:
+  role_name: chefserver
+  author: Ripon Banik
+  description: Install and Configure Foreman
+  company: Lyrcis Pvt Ltd (optional)
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 6
+    - name: Ubuntu
+      versions:
+        - bionic
+        - xenial
+        - trusty
+  galaxy_tags:
+    - cherfserver
+    - chef

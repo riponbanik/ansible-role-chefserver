@@ -1,0 +1,40 @@
+---
+matrix:
+  include:
+    - dist: xenial            
+      sudo: yes  
+
+language: python
+python:
+  - '2.7'
+
+# Doc: https://docs.travis-ci.com/user/customizing-the-build#Build-Matrix
+env:
+  - ANSIBLE_VERSION=latest
+  # - ANSIBLE_VERSION=2.6.0
+  # - ANSIBLE_VERSION=2.4.0
+  
+branches:
+  only:
+    - master
+
+before_install:
+  - ruby --version
+  - sudo apt-get update -qq
+  - gem install hocon
+
+install:
+  # Install Ansible.
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
+
+script:
+  # Check the role/playbook's syntax.
+  - ansible-lint tests/test.yml
+  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
+
+  # Run the role/playbook with ansible-playbook.
+  # - ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo -vvvv 
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

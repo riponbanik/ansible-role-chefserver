@@ -1,0 +1,48 @@
+---
+- name: Check to see if Chef Management Console is running
+  ignore_errors: true
+  uri:
+    url: https://localhost/login
+    validate_certs: false
+  register: check_console
+
+- name: Install and Configure Chef Server
+  block:
+    - name: install the server
+      yum:
+        name: https://packages.chef.io/files/stable/chef-server/{{ chefserver_version }}/el/{{ ansible_distribution_major_version }}/chef-server-core-{{ chefserver_version }}-1.el{{ ansible_distribution_major_version }}.x86_64.rpm
+        state: present
+        update_cache: yes
+    - name: configure the server
+      command: sudo chef-server-ctl reconfigure
+  when: check_console.status != 200
+
+- name: Install management console
+  block:
+    - name: install management component
+      command: sudo chef-server-ctl install chef-manage
+    - name: reconfigure the server
+      command: sudo chef-server-ctl reconfigure
+    - name: reconfigure the manager
+      command: sudo chef-manage-ctl reconfigure --accept-license
+  when: check_console.status != 200
+
+- name: Create initial user and organization
+  block:
+    - name: Check Admin
+      command: chef-server-ctl user-show {{ chefadmin_name }}
+      ignore_errors: true
+      register: check_user
+
+    - name: Check Organization
+      command: chef-server-ctl org-show {{ chef_organization }}
+      ignore_errors: true
+      register: check_org
+
+    - name: Create Admin Credential
+      command: chef-server-ctl user-create {{ chefadmin_name }} Chef Admin {{ chefadmin_email }}  {{ chefadmin_password }} --filename ~/.chef/{{ chefadmin_name }}.pem
+      when: check_user.rc !=0
+
+    - name: Create Default organization
+      command: chef-server-ctl org-create {{ chef_organization }} {{ chef_organization_full_name }} --association_user {{ chefadmin_name }} --filename ~/.chef/{{ chef_organization }}-validator.pem
+      when: check_org.rc !=0
