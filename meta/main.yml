@@ -2,7 +2,7 @@ dependencies: []
 galaxy_info:
   role_name: chefserver
   author: Ripon Banik
-  description: Install and Configure Foreman
+  description: Install and Configure ChefServer
   company: Lyrcis Pvt Ltd (optional)
   license: "license (BSD, MIT)"
   min_ansible_version: 2.4
