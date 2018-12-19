@@ -27,10 +27,14 @@
       register: check_org
 
     - name: Create Admin Credential
-      command: chef-server-ctl user-create {{ chefadmin_name }} Chef Admin {{ chefadmin_email }}  {{ chefadmin_password }} --filename ~/.chef/{{ chefadmin_name }}.pem
+      command: |
+        chef-server-ctl user-create {{ chefadmin_name }} Chef Admin {{ chefadmin_email }}  {{ chefadmin_password }} \
+        --filename ~/.chef/{{ chefadmin_name }}.pem
       when: check_user.rc !=0
 
     - name: Create Default organization
-      command: chef-server-ctl org-create {{ chef_organization }} {{ chef_organization_full_name }} --association_user {{ chefadmin_name }} --filename ~/.chef/{{ chef_organization }}-validator.pem
+      command: |
+        chef-server-ctl org-create {{ chef_organization }} {{ chef_organization_full_name }} \
+        --association_user {{ chefadmin_name }} --filename ~/.chef/{{ chef_organization }}-validator.pem
       when: check_org.rc !=0
   when: create_default_credential | bool
