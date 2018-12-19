@@ -3,6 +3,4 @@
   roles:
     - role: kitchen_test_role
       chefserver_version: 12.18.14
-
-      
-      
+      chefserver_hostname: chef.4thcoffee.com

@@ -6,4 +6,5 @@ chefadmin_email: admin@4thcoffee.com
 chefadmin_password: password
 chef_organization: 4thcoffee
 chef_organization_full_name: "Fourth Coffee, Inc."
-
+install_management_console: true
+create_default_credential: true

@@ -5,3 +5,6 @@
 
 # Setup/install tasks.
 - include_tasks: "Setup_{{ ansible_os_family }}.yml"
+
+# Setup/options.
+- include_tasks: "Setup_Options.yml"

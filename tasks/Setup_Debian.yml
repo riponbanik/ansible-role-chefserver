@@ -1,11 +1,32 @@
 ---
-- name: Install and Configure Chef Server for Ubuntu
+- name: Set hostname as fqdn
+  hostname: name={{ chefserver_hostname }}
+  when: chefserver_hostname is defined
+
+- name: Resolve hostname via /etc/hosts to resolve `hostname -f`
+  lineinfile: dest=/etc/hosts line="{{ansible_default_ipv4.address}} {{ansible_fqdn}} {{ansible_hostname}}"
+  when: chefserver_hostname is defined
+
+- name: Check the package is installed
+  ignore_errors: true
+  command: which chef-server-ctl
+  register: check_package
+
+- name: Check the management console installed
+  ignore_errors: true
+  uri:
+    url: https://localhost/login
+    validate_certs: false
+  register: check_console
+
+- name: Install and Configure Chef Server
   block:
     - name: install the server
       apt:
-        name: https://packages.chef.io/files/stable/chef-server/{{ chefserver_version }}/ubuntu/{{ ansible_distribution_version }}/chef-server-core_{{ chefserver_version }}-1_amd64.deb
+        deb: https://packages.chef.io/files/stable/chef-server/{{ chefserver_version }}/ubuntu/{{ ansible_distribution_version }}/chef-server-core_{{ chefserver_version }}-1_amd64.deb
         state: present
         update_cache: yes
     - name: configure the server
       command: sudo chef-server-ctl reconfigure
+  when: check_package.rc != 0
 

@@ -1,38 +1,77 @@
-Role Name
-=========
+Ansible Role to Install and Configure Openshource Chef Server 
 
-A brief description of the role goes here.
+[![Build Status](https://travis-ci.org/riponbanik/ansible-role-chefserver.svg?branch=master)](https://travis-ci.org/riponbanik/ansible-role-chefserver)
 
-Requirements
-------------
+## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Your Chef server must have a resolvable hostname. The hostname for the Chef server must be a FQDN, including the domain suffix. se Ansible hostname module to change hostname to fqdn or use the following role variable to change hostname e.g.
+   chefserver_hostname: chef.4thcoffee.com
 
-Role Variables
---------------
+When the install is successful, the server can be accessed using https://fqdn
+     
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+## Role Variables
 
-Dependencies
-------------
+Available variables are listed below, along with default values (see `defaults/main.yml`):
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+   chefserver_version: 12.18.14
 
-Example Playbook
-----------------
+Specify the version of server to be installed.
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+  chefadmin_name: chefadmin
+  chefadmin_email: admin@4thcoffee.com
+  chefadmin_password: password
+    
+Console login credentials for default administrator. Not required if Management Console is not needed.
 
-    - hosts: servers
+    chef_organization: 4thcoffee
+    chef_organization_full_name: "Fourth Coffee, Inc."
+
+Chef organization details.
+
+    install_management_console: true
+
+Install management console. Default true
+
+    create_default_credential: true
+
+Setup default administrator credential. Default true
+
+## Dependencies
+
+VM (on-perm or cloud) is needed to install. Tested with the following OS -
+
+   1. Redhat Enterprise Linux 7
+   2. CentOS 7
+   3. Unbuntu 18.04 (Bionic) 
+   4. Ubuntu 16.04 (Xenial)  
+
+## Example Playbook
+
+    - name: Install Puppet Master
+      hosts: servers
+      vars_files:
+        - vars/main.yml
       roles:
-         - { role: username.rolename, x: 42 }
+        - role:  riponbanik.chefserver
 
-License
--------
+## Installation
 
-BSD
+### Install the role from ansible galaxy to ansible default resarch path
+```
+sudo ansible-galaxy install riponbanik.chefserver -p /etc/ansible/roles
+```
 
-Author Information
-------------------
+### Run the installation locally on the machine
+```
+sudo ansible-playbook -c local -i "localhost," playbook.yml
+```
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+## License
+
+MIT / BSD
+
+
+## Author Information
+
+This role was created in 2018 by [Ripon Banik](https://www.linkedin.com/in/ripon-banik-79956b23/)
