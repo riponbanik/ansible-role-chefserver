@@ -8,6 +8,5 @@
       changed_when: false
 
   roles:
-    - role: ansible-role-chefserver      
+    - role: ansible-role-chefserver
       chefserver_hostname: chef.4thcoffee.com
-      
