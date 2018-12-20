@@ -48,7 +48,7 @@ VM (on-perm or cloud) is needed to install. Tested with the following OS -
 
 ## Example Playbook
 
-    - name: Install Puppet Master
+    - name: Install Chef Server
       hosts: servers
       vars_files:
         - vars/main.yml
